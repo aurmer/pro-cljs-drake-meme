@@ -46,27 +46,27 @@
     <div class="control">
       <div class="input-container">
         <label for="borderWidth">Meme Width</label>
-        <input class="meme-style-control" type="range" min="0" max="3000" value="1200" data-query-selector=".meme" data-style="width" data-units="px" />
+        <input id="meme-width" class="meme-style-control" type="range" min="0" max="3000" value="1200" data-query-selector=".meme" data-style="width" data-units="px" />
       </div>
       <div class="input-container">
         <label for="borderWidth">Row Border Width</label>
-        <input class="meme-style-control" type="range" min="0" max="20" value="5" data-query-selector=".meme-row" data-style="borderWidth" data-units="px" />
+        <input id="row-border-width" class="meme-style-control" type="range" min="0" max="20" value="5" data-query-selector=".meme-row" data-style="borderWidth" data-units="px" />
       </div>
       <div class="input-container">
         <label for="margin">Row Margin</label>
-        <input class="meme-style-control" type="range" min="0" max="20" value="5" data-query-selector=".meme-row" data-style="margin" data-units="px" />
+        <input id="row-margin" class="meme-style-control" type="range" min="0" max="20" value="5" data-query-selector=".meme-row" data-style="margin" data-units="px" />
       </div>
       <div class="input-container">
         <label for="margin">Image Size</label>
-        <input class="meme-style-control" type="range" min="0" max="1000" value="400" data-query-selector=".image" data-style="height" data-units="px" />
+        <input id="image-size" class="meme-style-control" type="range" min="0" max="1000" value="400" data-query-selector=".image" data-style="height" data-units="px" />
       </div>
       <div class="input-container">
         <label for="margin">Logo Size</label>
-        <input class="meme-style-control" type="range" min="0" max="200" value="70" data-query-selector=".logo" data-style="height" data-units="px" />
+        <input id="logo-size" class="meme-style-control" type="range" min="0" max="200" value="70" data-query-selector=".logo" data-style="height" data-units="px" />
       </div>
       <div class="input-container">
         <label for="margin">Logo Margin</label>
-        <input class="meme-style-control" type="range" min="0" max="50" value="10" data-query-selector=".logo" data-style="margin" data-units="px" />
+        <input id="logo-margin" class="meme-style-control" type="range" min="0" max="50" value="10" data-query-selector=".logo" data-style="margin" data-units="px" />
       </div>
     </div>
     <div class="meme">
@@ -84,13 +84,36 @@
       </div>
     </div>
     <script>
+      //Auto-generate event listeners from all inputs
       Array.from(document.querySelectorAll('input')).forEach((el)=> {
-        console.log(el.dataset)
         document.querySelectorAll(el.dataset.querySelector).forEach((row)=> row.style[el.dataset.style] = el.value + el.dataset.units)
-        el.addEventListener('input',(ev)=>{
-            document.querySelectorAll(el.dataset.querySelector).forEach((row)=> row.style[el.dataset.style] = ev.target.value + el.dataset.units)
-        })
+        el.addEventListener('input',(evt)=>updateStyle(el,evt))
+        el.addEventListener('change',(evt)=>updateStyle(el,evt))
       })
+
+      function updateStyle(inputElement,evt) {
+        document.querySelectorAll(inputElement.dataset.querySelector).forEach((row)=> row.style[inputElement.dataset.style] = evt.target.value + inputElement.dataset.units)
+
+        localStorage.setItem("memeSettings",JSON.stringify(getAllValues()))
+      }
+
+      function getAllValues() {
+        return Array.from(document.querySelectorAll('input')).reduce((acc,inputEl)=>{
+          return {...acc,[inputEl.id]:inputEl.value}
+        },{})
+      }
+
+      function loadInputsFromStore () {
+        const memeSettings = JSON.parse(localStorage.getItem("memeSettings"))
+        if(memeSettings) {
+          Object.keys(memeSettings).forEach((key) => {
+            document.getElementById(key).value = memeSettings[key]
+            document.getElementById(key).dispatchEvent(new Event('change'))
+          })
+        }
+      }
+
+      loadInputsFromStore()
     </script>
   </body>
 </html>
