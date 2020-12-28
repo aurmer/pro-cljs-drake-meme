@@ -1,0 +1,96 @@
+<!DOCTYPE html>
+<html lang="en" dir="ltr">
+  <head>
+    <meta charset="utf-8">
+    <title></title>
+    <style>
+      .meme {
+        display: flex;
+        flex-direction: column;
+      }
+      .meme-row {
+        display: flex;
+        border: solid 0;
+      }
+      .image {
+        height: 100px;
+      }
+      .text {
+        flex-grow: 1;
+        position: relative;
+      }
+      .control {
+        display: flex;
+        flex-wrap: wrap;
+      }
+      .input-container {
+        padding: 20px;
+        border: solid 3px black;
+        border-radius: 10px;
+        margin: 10px;
+      }
+      .meme-style-control {
+        display: block;
+      }
+      .logo {
+        position: absolute;
+        top: 0;
+        right: 0;
+        height: 30px;
+      }
+    </style>
+  </head>
+  <body>
+    <h1>Drake Meme Generator</h1>
+    <h3>just screenshot and add water (or text)</h3>
+    <div class="control">
+      <div class="input-container">
+        <label for="borderWidth">Meme Width</label>
+        <input class="meme-style-control" type="range" min="0" max="3000" value="1200" data-query-selector=".meme" data-style="width" data-units="px" />
+      </div>
+      <div class="input-container">
+        <label for="borderWidth">Row Border Width</label>
+        <input class="meme-style-control" type="range" min="0" max="20" value="5" data-query-selector=".meme-row" data-style="borderWidth" data-units="px" />
+      </div>
+      <div class="input-container">
+        <label for="margin">Row Margin</label>
+        <input class="meme-style-control" type="range" min="0" max="20" value="5" data-query-selector=".meme-row" data-style="margin" data-units="px" />
+      </div>
+      <div class="input-container">
+        <label for="margin">Image Size</label>
+        <input class="meme-style-control" type="range" min="0" max="1000" value="400" data-query-selector=".image" data-style="height" data-units="px" />
+      </div>
+      <div class="input-container">
+        <label for="margin">Logo Size</label>
+        <input class="meme-style-control" type="range" min="0" max="200" value="70" data-query-selector=".logo" data-style="height" data-units="px" />
+      </div>
+      <div class="input-container">
+        <label for="margin">Logo Margin</label>
+        <input class="meme-style-control" type="range" min="0" max="50" value="10" data-query-selector=".logo" data-style="margin" data-units="px" />
+      </div>
+    </div>
+    <div class="meme">
+      <div class="meme-row">
+        <img class="image" src="img/drake_no.png" />
+        <div class="text">
+          <img class="logo" src="img/js_logo.png" />
+        </div>
+      </div>
+      <div class="meme-row">
+        <img class="image" src="img/drake_yes.png" />
+        <div class="text">
+          <img class="logo" src="img/cljs_logo.png" />
+        </div>
+      </div>
+    </div>
+    <script>
+      Array.from(document.querySelectorAll('input')).forEach((el)=> {
+        console.log(el.dataset)
+        document.querySelectorAll(el.dataset.querySelector).forEach((row)=> row.style[el.dataset.style] = el.value + el.dataset.units)
+        el.addEventListener('input',(ev)=>{
+            document.querySelectorAll(el.dataset.querySelector).forEach((row)=> row.style[el.dataset.style] = ev.target.value + el.dataset.units)
+        })
+      })
+    </script>
+  </body>
+</html>
