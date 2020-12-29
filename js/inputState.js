@@ -6,7 +6,7 @@ function updateStyle(evt) {
 }
 
 function renderState (inputElement,domNode) {
-  const newValue = inputElement.value
+  const newValue = parseInt(inputElement.value)
   const offset = inputElement.dataset.subtract && -parseInt(domNode.style[inputElement.dataset.subtract])/2 || ""
   domNode.style[inputElement.dataset.style] = newValue + offset + inputElement.dataset.units
   if(inputElement.dataset.dep) {
