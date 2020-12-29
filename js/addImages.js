@@ -25,17 +25,17 @@ function attachNewImageCard(newImageCard) {
 document.getElementById('add-image-field').addEventListener('change',(evt)=>{
   const idx = document.getElementById('draggable-images').children.length-1
   const tgt = evt.target
-  const files = tgt.files
-  attachNewImageCard(renderNewImageCard(idx))
+  const file = tgt.files[0]
 
   requestAnimationFrame(()=>{
     // FileReader support
-    if (FileReader && files && files.length) {
-      var fr = new FileReader();
+    if (FileReader && file && file.type.includes('image')) {
+      attachNewImageCard(renderNewImageCard(idx))
+      const fr = new FileReader();
       fr.onload = function () {
         document.getElementById(`image${idx}`).src = fr.result;
       }
-      fr.readAsDataURL(files[0]);
+      fr.readAsDataURL(file);
     }
   })
 

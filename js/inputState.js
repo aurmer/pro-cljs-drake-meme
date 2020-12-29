@@ -1,23 +1,21 @@
-//Auto-generate event listeners from all inputs
-Array.from(document.querySelectorAll('input')).forEach((el)=> {
-  document.querySelectorAll(el.dataset.querySelector).forEach((row)=> row.style[el.dataset.style] = el.value + el.dataset.units)
-  el.addEventListener('input',(evt)=>updateStyle(el,evt.target.value))
-  el.addEventListener('change',(evt)=>updateStyle(el,evt.target.value))
-})
 
-function updateStyle(inputElement,newValue) {
-  document.querySelectorAll(inputElement.dataset.querySelector).forEach((row)=> {
-    const sub = inputElement.dataset.subtract && parseInt(row.style[inputElement.dataset.subtract])/2 || 0
-    row.style[inputElement.dataset.style] = newValue - sub + inputElement.dataset.units
-    if(inputElement.dataset.dep) {
-      const depInput = document.getElementById(inputElement.dataset.dep)
-      updateStyle(depInput,depInput.value)
-    }
-  })
-  localStorage.setItem("memeSettings",JSON.stringify(getAllValues()))
+function updateStyle(evt) {
+  const inputElement = evt.target
+  document.querySelectorAll(inputElement.dataset.querySelector).forEach(renderState.bind(null,inputElement))
+  localStorage.setItem("memeSettings",JSON.stringify(getAllStateValues()))
 }
 
-function getAllValues() {
+function renderState (inputElement,domNode) {
+  const newValue = inputElement.value
+  const offset = inputElement.dataset.subtract && -parseInt(domNode.style[inputElement.dataset.subtract])/2 || ""
+  domNode.style[inputElement.dataset.style] = newValue + offset + inputElement.dataset.units
+  if(inputElement.dataset.dep) {
+    const depInput = document.getElementById(inputElement.dataset.dep)
+    depInput.dispatchEvent(new Event('input'))
+  }
+}
+
+function getAllStateValues() {
   return Array.from(document.querySelectorAll('input.meme-style-control')).reduce((acc,inputEl)=>{
     return {...acc,[inputEl.id]:inputEl.value}
   },{})
@@ -32,5 +30,11 @@ function loadInputsFromStore () {
     })
   }
 }
+
+//Auto-generate event listeners from all inputs
+Array.from(document.querySelectorAll('input.meme-style-control')).forEach((el)=> {
+  el.addEventListener('input',updateStyle)
+  el.dispatchEvent(new Event('input'))
+})
 
 loadInputsFromStore()

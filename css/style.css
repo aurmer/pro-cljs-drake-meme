@@ -11,6 +11,7 @@
   }
   .image {
     height: 100px;
+    z-index: -5;
   }
   .text {
     flex-grow: 1;

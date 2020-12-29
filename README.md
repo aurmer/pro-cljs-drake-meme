@@ -1,8 +1,7 @@
  # Professional ClojureScript Drake Meme
 
- This is a very simple app that allows the 'shaping' of a meme image so it is
- ready to have text pasted inside. Later versions might include text insertion
- within the app itself.
+ This is a very simple app that allows the 'shaping' of the meme image
+ and provides the ability to add user-provided images as content.
 
  ## Live Page
 
