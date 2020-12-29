@@ -3,70 +3,46 @@
   <head>
     <meta charset="utf-8">
     <title>Make your own Drake meme!</title>
-    <style>
-      .meme {
-        display: flex;
-        flex-direction: column;
-      }
-      .meme-row {
-        display: flex;
-        border: solid 0;
-      }
-      .image {
-        height: 100px;
-      }
-      .text {
-        flex-grow: 1;
-        position: relative;
-      }
-      .control {
-        display: flex;
-        flex-wrap: wrap;
-      }
-      .input-container {
-        padding: 20px;
-        border: solid 3px black;
-        border-radius: 10px;
-        margin: 10px;
-      }
-      .meme-style-control {
-        display: block;
-      }
-      .logo {
-        position: absolute;
-        top: 0;
-        right: 0;
-        height: 30px;
-      }
-    </style>
+    <link rel="stylesheet" href="css/style.css">
   </head>
   <body>
     <h1>Drake Meme Generator</h1>
-    <h3>just screenshot and add water (or text)</h3>
+    <h3>just screenshot when you are done</h3>
     <div class="control">
       <div class="input-container">
-        <label for="borderWidth">Meme Width</label>
+        <label for="meme-width">Meme Width</label>
         <input id="meme-width" class="meme-style-control" type="range" min="0" max="3000" value="1200" data-query-selector=".meme" data-style="width" data-units="px" />
       </div>
       <div class="input-container">
-        <label for="borderWidth">Row Border Width</label>
-        <input id="row-border-width" class="meme-style-control" type="range" min="0" max="20" value="5" data-query-selector=".meme-row" data-style="borderWidth" data-units="px" />
+        <label for="row-border-width">Row Border Thickness</label>
+        <input id="row-border-width" class="meme-style-control" type="range" min="0" max="20" value="5" data-query-selector=".meme-row" data-style="borderWidth" data-dep="row-margin" data-units="px" />
       </div>
       <div class="input-container">
-        <label for="margin">Row Margin</label>
-        <input id="row-margin" class="meme-style-control" type="range" min="0" max="20" value="5" data-query-selector=".meme-row" data-style="margin" data-units="px" />
+        <label for="row-margin">Row Margin</label>
+        <input id="row-margin" class="meme-style-control" type="range" min="0" max="20" value="5" data-query-selector=".meme-row" data-style="margin" data-subtract="borderWidth" data-units="px" />
       </div>
       <div class="input-container">
-        <label for="margin">Image Size</label>
+        <label for="image-size">Image Size</label>
         <input id="image-size" class="meme-style-control" type="range" min="0" max="1000" value="400" data-query-selector=".image" data-style="height" data-units="px" />
       </div>
       <div class="input-container">
-        <label for="margin">Logo Size</label>
+        <label for="canvas-color">Canvas Color</label>
+        <input id="canvas-color" class="meme-style-control" value="#ffffff" data-query-selector=".text" data-style="backgroundColor" data-units="" />
+      </div>
+      <div class="input-container">
+        <label for="logo-size">Logo Size</label>
         <input id="logo-size" class="meme-style-control" type="range" min="0" max="200" value="70" data-query-selector=".logo" data-style="height" data-units="px" />
       </div>
       <div class="input-container">
-        <label for="margin">Logo Margin</label>
+        <label for="logo-margin">Logo Margin</label>
         <input id="logo-margin" class="meme-style-control" type="range" min="0" max="50" value="10" data-query-selector=".logo" data-style="margin" data-units="px" />
+      </div>
+    </div>
+    <h2>Now with draggable images! (for the content)</h2>
+    <div id='draggable-images' class="draggable-images">
+      <div id='add-image-container'>
+        <label for="add-image-field" class="add-image">+</label>
+        <input type="file" id="add-image-field"></input>
       </div>
     </div>
     <div class="meme">
@@ -83,37 +59,8 @@
         </div>
       </div>
     </div>
-    <script>
-      //Auto-generate event listeners from all inputs
-      Array.from(document.querySelectorAll('input')).forEach((el)=> {
-        document.querySelectorAll(el.dataset.querySelector).forEach((row)=> row.style[el.dataset.style] = el.value + el.dataset.units)
-        el.addEventListener('input',(evt)=>updateStyle(el,evt))
-        el.addEventListener('change',(evt)=>updateStyle(el,evt))
-      })
-
-      function updateStyle(inputElement,evt) {
-        document.querySelectorAll(inputElement.dataset.querySelector).forEach((row)=> row.style[inputElement.dataset.style] = evt.target.value + inputElement.dataset.units)
-
-        localStorage.setItem("memeSettings",JSON.stringify(getAllValues()))
-      }
-
-      function getAllValues() {
-        return Array.from(document.querySelectorAll('input')).reduce((acc,inputEl)=>{
-          return {...acc,[inputEl.id]:inputEl.value}
-        },{})
-      }
-
-      function loadInputsFromStore () {
-        const memeSettings = JSON.parse(localStorage.getItem("memeSettings"))
-        if(memeSettings) {
-          Object.keys(memeSettings).forEach((key) => {
-            document.getElementById(key).value = memeSettings[key]
-            document.getElementById(key).dispatchEvent(new Event('change'))
-          })
-        }
-      }
-
-      loadInputsFromStore()
-    </script>
+    <script src="js/drag.js"></script>
+    <script src="js/inputState.js"></script>
+    <script src="js/addImages.js"></script>
   </body>
 </html>

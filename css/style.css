@@ -1,0 +1,65 @@
+  body {
+    margin: 20px;
+  }
+  .meme {
+    display: flex;
+    flex-direction: column;
+  }
+  .meme-row {
+    display: flex;
+    border: solid 0;
+  }
+  .image {
+    height: 100px;
+  }
+  .text {
+    flex-grow: 1;
+    position: relative;
+  }
+  .control {
+    display: flex;
+    flex-wrap: wrap;
+  }
+  .input-container {
+    padding: 20px;
+    border: solid 3px black;
+    border-radius: 10px;
+    margin: 10px;
+  }
+  .meme-style-control {
+    display: block;
+  }
+  .logo {
+    position: absolute;
+    top: 0;
+    right: 0;
+    height: 30px;
+    z-index: 10;
+  }
+  .draggable-images {
+    display: flex;
+    flex-wrap: wrap;
+    margin-bottom: 10px;
+  }
+  .draggable-image {
+    margin: 10px;
+    height: 90px;
+    position: relative;
+    z-index: 5;
+  }
+  #add-image-field {
+    display: none;
+  }
+  .add-image {
+    display: block;
+    height: 90px;
+    width: 90px;
+    box-sizing: border-box;
+    border-style: dashed;
+    border-width: 3px;
+    border-radius: 15px;
+    margin: 10px;
+    font-size: 72px;
+    text-align: center;
+    cursor: pointer;
+  }
