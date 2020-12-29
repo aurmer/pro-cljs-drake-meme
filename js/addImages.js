@@ -18,7 +18,7 @@ function attachNewImageCard(newImageCard) {
     const imgTag = document.getElementById(`image${idx}`)
     const inputTag = document.getElementById(`ctrl-image${idx}`)
     imgTag.addEventListener('dragstart',dragStartHandler)
-    inputTag.addEventListener('input',(evt)=>updateStyle(inputTag,evt))
+    inputTag.addEventListener('input',updateStyle)
   })
 }
 
